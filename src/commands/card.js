@@ -13,6 +13,16 @@ const elements = {
     '光': 'Light'
 }
 
+const imageLangs = {
+    'EN': 'eg',
+    'FR': 'fr',
+    'JA': 'ja',
+    'ES': 'es',
+    'IT': 'it',
+    'DE': 'de',
+    'NA': 'eg'
+}
+
 function parseText(text) {
     return text
         .replace(/\[\[br]]/gmi, '\n')
@@ -27,7 +37,7 @@ function parseText(text) {
 
 function getCardEmbed(card, lang) {
     let embed = new MessageEmbed()
-        .setImage(`https://fftcg.cdn.sewest.net/images/cards/full/${card.Code}_${lang.toLowerCase()}.jpg`)
+        .setImage(`https://fftcg.cdn.sewest.net/images/cards/full/${card.Code}_${imageLangs[lang]}.jpg`)
         .setTitle(`${getI18nProperty(card, 'Name', lang)} (${card.Code})`)
         .setDescription(parseText(getI18nProperty(card, 'Text', lang)))
         .addField('Type', getI18nProperty(card, 'Type', lang), true)
