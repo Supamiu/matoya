@@ -17,9 +17,9 @@ function parseText(text) {
     return text
         .replace(/\[\[br]]/gmi, '\n')
         .replace(/《S》/gmi, '**S** ')
-        .replace(/\[\[s]]([^[]*)\[\[\/]]/, '**$1** ')
-        .replace(/\[\[i]]([^[]*)\[\[\/]]/, '__$1__ ')
-        .replace(/\[\[ex]]([^[]*)\[\[\/]]/, '***$1*** ')
+        .replace(/\[\[s]]([^[]*)\[\[\/]]/gmi, '**$1** ')
+        .replace(/\[\[i]]([^[]*)\[\[\/]]/gmi, '__$1__ ')
+        .replace(/\[\[ex]]([^[]*)\[\[\/]]/gmi, '***$1*** ')
         .replace(new RegExp(`《([${Object.keys(elements).join('')}]+)》`, 'gmi'), (a, b) => `《(${elements[b]})》 `)
         .replace(/《(\d)》/gmi, '《($1)》 ')
         .replace(/[《》]/gmi, '*')
