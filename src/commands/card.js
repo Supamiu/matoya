@@ -27,6 +27,7 @@ function parseText(text) {
     return text
         .replace(/\[\[br]]/gmi, '\n')
         .replace(/《S》/gmi, '**S** ')
+        .replace(/ダル/gmi, ':arrow_heading_down:')
         .replace(/\[\[s]]([^[]*)\[\[\/]]/gmi, '**$1** ')
         .replace(/\[\[i]]([^[]*)\[\[\/]]/gmi, '__$1__ ')
         .replace(/\[\[ex]]([^[]*)\[\[\/]]/gmi, '***$1*** ')
