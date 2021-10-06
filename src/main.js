@@ -1,10 +1,10 @@
 const fs = require('fs');
 const path = require('path');
-const { Client, Collection, Intents } = require('discord.js');
-const { token } = require('./config.js');
+const {Client, Collection, Intents} = require('discord.js');
+const {token} = require('./config.js');
 
 
-const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
+const client = new Client({intents: [Intents.FLAGS.GUILDS]});
 
 client.commands = new Collection();
 const commandFiles = fs.readdirSync(path.join(__dirname, './commands')).filter(file => file.endsWith('.js'));
@@ -19,9 +19,11 @@ client.once('ready', () => {
 });
 
 client.on('interactionCreate', async interaction => {
-    if (!interaction.isCommand()) return;
+    let command = client.commands.get(interaction.commandName);
 
-    const command = client.commands.get(interaction.commandName);
+    if (interaction.isSelectMenu()) {
+        command = client.commands.get(interaction.customId.split(':')[0]);
+    }
 
     if (!command) return;
 
@@ -29,7 +31,7 @@ client.on('interactionCreate', async interaction => {
         await command.execute(interaction);
     } catch (error) {
         console.error(error);
-        return interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
+        return interaction.reply({content: 'There was an error while executing this command!', ephemeral: true});
     }
 });
 
