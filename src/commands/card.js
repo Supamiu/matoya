@@ -40,7 +40,8 @@ function parseText(text) {
         .replace(/\[\[ex]]([^[]*)\[\[\/]]/gmi, '***$1*** ')
         .replace(new RegExp(`《([${Object.keys(elements).join('')}]+)》`, 'gmi'), (a, b) => `《(${elements[b]})》 `)
         .replace(/《(\d)》/gmi, '《($1)》 ')
-        .replace(/[《》]/gmi, '*')
+        .replace(/《/gmi, '*')
+        .replace(/》/gmi, '* ')
 }
 
 function getCardEmbed(card, lang) {
