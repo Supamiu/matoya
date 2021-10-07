@@ -35,4 +35,8 @@ client.on('interactionCreate', async interaction => {
     }
 });
 
-client.login(token);
+client.login(token).then(() => {
+    client.user.setActivity('Discarding summons...')
+});
+
+
