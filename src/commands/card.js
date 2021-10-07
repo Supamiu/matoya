@@ -7,7 +7,7 @@ const elements = {
     '風': 'Wind',
     '氷': 'Ice',
     '土': 'Earth',
-    '雷': 'Thunder',
+    '雷': 'Lightning',
     '水': 'Water',
     '闇': 'Darkness',
     '光': 'Light'
