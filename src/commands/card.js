@@ -23,6 +23,13 @@ const imageLangs = {
     'NA': 'eg'
 }
 
+function getCardImage(card, lang) {
+    if (lang === 'JA') {
+        return `http://www.square-enix-shop.com/jp/ff-tcg/card/cimg/large/opus${card.Code.split('-')[0]}/${card.Code}.png`
+    }
+    return `https://fftcg.cdn.sewest.net/images/cards/full/${card.Code}_${imageLangs[lang]}.jpg`;
+}
+
 function parseText(text) {
     return text
         .replace(/\[\[br]]/gmi, '\n')
@@ -38,7 +45,7 @@ function parseText(text) {
 
 function getCardEmbed(card, lang) {
     let embed = new MessageEmbed()
-        .setImage(`https://fftcg.cdn.sewest.net/images/cards/full/${card.Code}_${imageLangs[lang]}.jpg`)
+        .setImage(getCardImage(card, lang))
         .setTitle(`${getI18nProperty(card, 'Name', lang)} (${card.Code})`)
         .setDescription(parseText(getI18nProperty(card, 'Text', lang)))
         .addField('Type', getI18nProperty(card, 'Type', lang), true)
