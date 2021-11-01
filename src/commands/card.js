@@ -112,14 +112,16 @@ module.exports = {
                     embeds: [getCardEmbed(matchingCards[0], lang)]
                 });
             } else {
-                const options = matchingCards.map(card => {
-                    const cardName = `${getI18nProperty(card, 'Name', lang)} / ${getI18nProperty(card, 'Name', 'EN')}`;
-                    return {
-                        label: card.Code,
-                        description: cardName,
-                        value: card.Code
-                    }
-                });
+                const options = matchingCards
+                    .map(card => {
+                        const cardName = `${getI18nProperty(card, 'Name', lang)} / ${getI18nProperty(card, 'Name', 'EN')}`;
+                        return {
+                            label: card.Code,
+                            description: cardName,
+                            value: card.Code
+                        }
+                    })
+                    .filter((option, index, array) => array.findIndex(r => r.value === option.value) === index);
 
                 const selector = new MessageActionRow()
                     .addComponents(
