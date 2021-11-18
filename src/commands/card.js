@@ -1,17 +1,8 @@
 const {SlashCommandBuilder} = require('@discordjs/builders');
 const cards = require('../data/cards.json');
 const {MessageActionRow, MessageSelectMenu, MessageEmbed} = require('discord.js');
+const {elements, getI18nProperty} = require('../common');
 
-const elements = {
-    '火': 'Fire',
-    '風': 'Wind',
-    '氷': 'Ice',
-    '土': 'Earth',
-    '雷': 'Lightning',
-    '水': 'Water',
-    '闇': 'Darkness',
-    '光': 'Light'
-}
 
 const imageLangs = {
     'EN': 'eg',
@@ -59,13 +50,6 @@ function getCardEmbed(card, lang) {
         .addField('Categories', [1, 2].map(i => card[`Category_${i}`].split(' ')[0]).filter(c => c !== '').join(', '), true)
         .addField('Opus', card.Set, true)
         .addField('Code', card.Code, true)
-}
-
-function getI18nProperty(card, property, lang) {
-    if (lang === 'JA') {
-        return card[property];
-    }
-    return card[`${property}_${lang}`];
 }
 
 const inputsCache = {};
