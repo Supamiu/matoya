@@ -6,31 +6,17 @@ const {SlashCommandBuilder} = require('@discordjs/builders');
 const cards = require('../data/cards.json');
 const {MessageEmbed} = require('discord.js');
 
-// Just to avoid too many updates
-let lastUpdate = 0;
-
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('update')
         .setDescription('Update Matoya\'s cards registry'),
     async execute(interaction) {
-        // One update every 10min max
-        if (Date.now() - lastUpdate < 600000) {
-            await interaction.reply({
-                embeds: [
-                    new MessageEmbed()
-                        .setTitle(`Card Update isn't available`)
-                        .setDescription(`Another update has been done <t:${lastUpdate}:R>, you'll be able to run another one <t:${lastUpdate + 600000}:R>.`)
-                ]
-            });
-            return;
-        }
-
 
         await interaction.reply({
             embeds: [
                 new MessageEmbed()
                     .setTitle('Cards update started')
+                    .setColor('AQUA')
                     .setDescription(`Fetching latest cards from Square Enix API...`)
             ]
         });
@@ -42,18 +28,32 @@ module.exports = {
             "method": "POST",
             "mode": "cors"
         }).then(res => res.json());
+        const addedCards = fullIndex.cards.length - cards.length;
 
-        fs.writeFileSync(path.join(__dirname, '../data/cards.json'), JSON.stringify(fullIndex.cards));
+        if(addedCards > 0){
 
-        await interaction.editReply({
-            embeds: [
-                new MessageEmbed()
-                    .setTitle('Cards update done !')
-                    .setDescription(`Added ${fullIndex.cards.length - cards.length} cards. Restarting to apply changes, this should take a few seconds...`)
-            ]
-        });
-        setTimeout(() => {
-            exec('pm2 restart Matoya');
-        }, 1000);
+            fs.writeFileSync(path.join(__dirname, '../data/cards.json'), JSON.stringify(fullIndex.cards));
+
+            await interaction.editReply({
+                embeds: [
+                    new MessageEmbed()
+                        .setTitle('Cards update done !')
+                        .setColor('GREEN')
+                        .setDescription(`Added ${addedCards} cards. Restarting to apply changes, this should take a few seconds...`)
+                ]
+            });
+            setTimeout(() => {
+                exec('pm2 restart Matoya');
+            }, 1000);
+        } else {
+            await interaction.editReply({
+                embeds: [
+                    new MessageEmbed()
+                        .setTitle('Cards update done !')
+                        .setColor('GOLD')
+                        .setDescription(`No new cards found, nothing changed.`)
+                ]
+            });
+        }
     },
 };
