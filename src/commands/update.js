@@ -23,8 +23,18 @@ module.exports = {
                         .setDescription(`Another update has been done <t:${lastUpdate}:R>, you'll be able to run another one <t:${lastUpdate + 600000}:R>.`)
                 ]
             });
-
+            return;
         }
+
+
+        await interaction.reply({
+            embeds: [
+                new MessageEmbed()
+                    .setTitle('Cards update started')
+                    .setDescription(`Fetching latest cards from Square Enix API...`)
+            ]
+        });
+
         const fetch = await import('node-fetch').then(i => i.default);
 
         const fullIndex = await fetch("https://fftcg.square-enix-games.com/fr/get-cards", {
@@ -35,7 +45,7 @@ module.exports = {
 
         fs.writeFileSync(path.join(__dirname, './src/data/cards.json'), JSON.stringify(fullIndex.cards));
 
-        await interaction.reply({
+        await interaction.editReply({
             embeds: [
                 new MessageEmbed()
                     .setTitle('Cards update done !')
