@@ -43,16 +43,17 @@ module.exports = {
             "mode": "cors"
         }).then(res => res.json());
 
-        fs.writeFileSync(path.join(__dirname, './src/data/cards.json'), JSON.stringify(fullIndex.cards));
+        fs.writeFileSync(path.join(__dirname, '../data/cards.json'), JSON.stringify(fullIndex.cards));
 
         await interaction.editReply({
             embeds: [
                 new MessageEmbed()
                     .setTitle('Cards update done !')
-                    .setDescription(`Added ${fullIndex.cards.length - cards.length} cards. Restarting to apply changes, this should take a minute...`)
+                    .setDescription(`Added ${fullIndex.cards.length - cards.length} cards. Restarting to apply changes, this should take a few seconds...`)
             ]
         });
-
-        exec('pm2 restart Matoya');
+        setTimeout(() => {
+            exec('pm2 restart Matoya');
+        }, 1000);
     },
 };
