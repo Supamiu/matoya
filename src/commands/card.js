@@ -76,7 +76,7 @@ module.exports = {
         ),
     async execute(interaction) {
         if (interaction.isSelectMenu()) {
-            const card = cards.find(c => c.Code === interaction.values[0]);
+            const card = cards.find(c => c.code === interaction.values[0]);
             const lang = inputsCache[interaction.message.interaction.id];
             await interaction.reply({
                 embeds: [getCardEmbed(card, lang)]
@@ -104,9 +104,9 @@ module.exports = {
                     .map(card => {
                         const cardName = `${getI18nProperty(card, 'name', lang)} / ${getI18nProperty(card, 'name', 'en')}`;
                         return {
-                            label: card.Code,
+                            label: card.code,
                             description: cardName,
-                            value: card.Code
+                            value: card.code
                         }
                     })
                     .filter((option, index, array) => array.findIndex(r => r.value === option.value) === index);
