@@ -16,9 +16,9 @@ const imageLangs = {
 
 function getCardImage(card, lang) {
     if (lang === 'JA') {
-        return `http://www.square-enix-shop.com/jp/ff-tcg/card/cimg/large/opus${card.Code.split('-')[0]}/${card.Code}.png`
+        return `http://www.square-enix-shop.com/jp/ff-tcg/card/cimg/large/opus${card.code.split('-')[0]}/${card.code}.png`
     }
-    return `https://fftcg.cdn.sewest.net/images/cards/full/${card.Code}_${imageLangs[lang]}.jpg`;
+    return `https://fftcg.cdn.sewest.net/images/cards/full/${card.code}_${imageLangs[lang]}.jpg`;
 }
 
 function parseText(text) {
@@ -38,18 +38,22 @@ function parseText(text) {
 function getCardEmbed(card, lang) {
     let embed = new MessageEmbed()
         .setImage(getCardImage(card, lang))
-        .setTitle(`${getI18nProperty(card, 'Name', lang)} (${card.Code})`)
-        .setDescription(parseText(getI18nProperty(card, 'Text', lang)))
-        .addField('Type', getI18nProperty(card, 'Type', lang), true)
-    if (getI18nProperty(card, 'Job', lang)) {
-        embed = embed.addField('Job', getI18nProperty(card, 'Job', lang), true)
+        .setTitle(`${getI18nProperty(card, 'name', lang)} (${card.code})`)
+        .setDescription(parseText(getI18nProperty(card, 'text', lang)))
+        .addField('Type', getI18nProperty(card, 'type', lang), true)
+    if (getI18nProperty(card, 'job', lang)) {
+        embed = embed.addField('Job', getI18nProperty(card, 'job', lang), true)
     }
 
-    return embed.addField('Element', card.Element.split('/').map(el => elements[el]).join('/'), true)
-        .addField('Cost', card.Cost, true)
-        .addField('Categories', [1, 2].map(i => card[`Category_${i}`].split(' ')[0]).filter(c => c !== '').join(', '), true)
-        .addField('Opus', card.Set, true)
-        .addField('Code', card.Code, true)
+    return embed.addField('Element', card.element.map(el => elements[el]).join('/'), true)
+        .addField('Cost', card.cost, true)
+        .addField('Categories', [1, 2]
+            .filter(i => card[`category_${i}`] !== null)
+            .map(i => card[`category_${i}`].split(' ')[0])
+            .filter(c => c !== '')
+            .join(', '), true)
+        .addField('Opus', card.set, true)
+        .addField('Code', card.code, true)
 }
 
 const inputsCache = {};
@@ -63,11 +67,11 @@ module.exports = {
             .setDescription('Language to use for the card\'s name')
             .setRequired(true)
             .addChoices([
-                ['English', 'EN'],
-                ['Français', 'FR'],
-                ['Español', 'ES'],
-                ['Italiano', 'IT'],
-                ['日本', 'JA']
+                ['English', 'en'],
+                ['Français', 'fr'],
+                ['Español', 'es'],
+                ['Italiano', 'it'],
+                ['日本', 'ja']
             ])
         ),
     async execute(interaction) {
@@ -83,8 +87,8 @@ module.exports = {
         } else {
             const lang = interaction.options.getString('language');
             const matchingCards = cards.filter(c => {
-                return getI18nProperty(c, 'Name', lang).toLowerCase().indexOf(interaction.options.getString('name').toLowerCase()) > -1
-                    || getI18nProperty(c, 'Name', 'EN').toLowerCase().indexOf(interaction.options.getString('name').toLowerCase()) > -1
+                return getI18nProperty(c, 'name', lang).toLowerCase().indexOf(interaction.options.getString('name').toLowerCase()) > -1
+                    || getI18nProperty(c, 'name', 'en').toLowerCase().indexOf(interaction.options.getString('name').toLowerCase()) > -1
             });
 
             if (matchingCards.length === 0) {
@@ -98,7 +102,7 @@ module.exports = {
             } else {
                 const options = matchingCards
                     .map(card => {
-                        const cardName = `${getI18nProperty(card, 'Name', lang)} / ${getI18nProperty(card, 'Name', 'EN')}`;
+                        const cardName = `${getI18nProperty(card, 'name', lang)} / ${getI18nProperty(card, 'name', 'en')}`;
                         return {
                             label: card.Code,
                             description: cardName,

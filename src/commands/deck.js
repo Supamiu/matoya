@@ -13,26 +13,26 @@ module.exports = {
         .addStringOption(option => option.setName('language')
             .setDescription('Language to use for the card names')
             .addChoices([
-                ['English', 'EN'],
-                ['Français', 'FR'],
-                ['Español', 'ES'],
-                ['Italiano', 'IT'],
-                ['日本', 'JA']
+                ['English', 'en'],
+                ['Français', 'fr'],
+                ['Español', 'es'],
+                ['Italiano', 'it'],
+                ['日本', 'ja']
             ])
         ),
     async execute(interaction) {
-        const lang = interaction.options.getString('language') || 'EN';
+        const lang = interaction.options.getString('language') || 'en';
         const deckId = interaction.options.getString('link').split('/').pop();
         const deck = await axios.get(`https://ffdecks.com/api/deck?deck_id=${deckId}`).then(res => res.data);
         const cardsData = deck.cards.map(card => {
-            const FFTCGcard = cards.find(c => c.Code.startsWith(card.card.serial_number));
-            const elementsDisplay = FFTCGcard.Element.split('/').map(el => elementsEmotes[el]).join('/');
+            const FFTCGcard = cards.find(c => c.code.startsWith(card.card.serial_number));
+            const elementsDisplay = FFTCGcard.element.map(el => elementsEmotes[el]).join('/');
             return {
-                display: ` • ${elementsDisplay} [${FFTCGcard.Code}] **${getI18nProperty(FFTCGcard, 'Name', lang)}** x${card.quantity}`,
+                display: ` • ${elementsDisplay} [${FFTCGcard.code}] **${getI18nProperty(FFTCGcard, 'name', lang)}** x${card.quantity}`,
                 quantity: card.quantity,
-                type: FFTCGcard.Type_EN,
-                elements: FFTCGcard.Element.split('/'),
-                cost: FFTCGcard.Cost
+                type: FFTCGcard.type_en,
+                elements: FFTCGcard.element,
+                cost: FFTCGcard.cost
             };
         });
 

@@ -20,9 +20,6 @@ module.exports = {
         '光': '<:CPLight:910831840481398835>'
     },
     getI18nProperty(card, property, lang) {
-        if (lang === 'JA') {
-            return card[property];
-        }
-        return card[`${property}_${lang}`];
+        return card[`${property.toLowerCase()}_${lang.toLowerCase()}`];
     }
 }
