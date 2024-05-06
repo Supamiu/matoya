@@ -49,7 +49,7 @@ function getCardEmbed(card, lang) {
             .map(i => card[`category_${i}`].split(' ')[0])
             .filter(c => c !== '')
             .join(', '), true)
-        .addField('Opus', card.set, true)
+        .addField('Opus', card.set.join(', '), true)
         .addField('Code', card.code, true)
 }
 
