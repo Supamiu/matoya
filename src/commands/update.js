@@ -23,8 +23,8 @@ module.exports = {
 
         const fetch = await import('node-fetch').then(i => i.default);
 
-        const fullIndex = await fetch("https://fftcg.square-enix-games.com/fr/get-cards", {
-            "body": "{\"language\":\"fr\",\"text\":\"\",\"type\":[],\"element\":[],\"cost\":[],\"rarity\":[],\"power\":[],\"category_1\":[],\"set\":[],\"multicard\":\"\",\"ex_burst\":\"\",\"code\":\"\",\"special\":\"\",\"exactmatch\":0}",
+        const fullIndex = await fetch("https://fftcg.square-enix-games.com/en/get-cards", {
+            "body": "{\"language\":\"en\",\"text\":\"\",\"type\":[],\"element\":[],\"cost\":[],\"rarity\":[],\"power\":[],\"category_1\":[],\"set\":[],\"multicard\":\"\",\"ex_burst\":\"\",\"code\":\"\",\"special\":\"\",\"exactmatch\":0}",
             "method": "POST",
             "mode": "cors"
         }).then(res => res.json());

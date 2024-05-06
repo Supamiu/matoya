@@ -15,10 +15,7 @@ const imageLangs = {
 }
 
 function getCardImage(card, lang) {
-    if (lang === 'JA') {
-        return `http://www.square-enix-shop.com/jp/ff-tcg/card/cimg/large/opus${card.code.split('-')[0]}/${card.code}.png`
-    }
-    return `https://fftcg.cdn.sewest.net/images/cards/full/${card.code}_${imageLangs[lang]}.jpg`;
+    return card.images.full[0];
 }
 
 function parseText(text) {
