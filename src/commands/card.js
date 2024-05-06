@@ -59,7 +59,7 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName('card')
         .setDescription('Get a card by name and display it')
-        .addStringOption(option => option.setName('name').setDescription('Name of the card or part of it').setRequired(true))
+        .addStringOption(option => option.setName('name/code').setDescription('Name of the card or part of it, or its code').setRequired(true))
         .addStringOption(option => option.setName('language')
             .setDescription('Language to use for the card\'s name')
             .setRequired(true)
@@ -84,8 +84,9 @@ module.exports = {
         } else {
             const lang = interaction.options.getString('language');
             const matchingCards = cards.filter(c => {
-                return getI18nProperty(c, 'name', lang).toLowerCase().indexOf(interaction.options.getString('name').toLowerCase()) > -1
-                    || getI18nProperty(c, 'name', 'en').toLowerCase().indexOf(interaction.options.getString('name').toLowerCase()) > -1
+                return getI18nProperty(c, 'name', lang).toLowerCase().indexOf(interaction.options.getString('name/code').toLowerCase()) > -1
+                    || getI18nProperty(c, 'name', 'en').toLowerCase().indexOf(interaction.options.getString('name/code').toLowerCase()) > -1
+                    || c.code.toLowerCase() === interaction.options.getString('name/code').toLowerCase()
             });
 
             if (matchingCards.length === 0) {
